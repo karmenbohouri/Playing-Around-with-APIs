@@ -1,20 +1,19 @@
 # Playing-Around-with-APIs
 # Travel Weather Planner
 
-A responsive web application that allows users to explore waether conditions and exchange rates across 20 cities in 10 countries.
+A responsive web application that allows users to explore weather conditions and exchange rates across 20 cities in 10 countries.
 
-The application retrieves current weather information and exchnge rates from public APIs. Users can search, filter, and sort destinations to compare conditions around the world.
+The application retrieves current weather information and exchange rates from public APIs. Users can search, filter, and sort destinations to compare conditions around the world.
 
 ## Live Application
 
 - **Deployed application:** https://35.175.242.143
 - **GitHub repository:** https://github.com/karmenbohouri/Playing-Around-with-APIs
-- **Demo video:** [add video link]
 
 ## Features
 
 - Display current weather conditions for 20 cities across 10 countries.
-- Shows current temperature and weather descriptions.
+- Display current temperature and weather descriptions.
 - Display exchange rates based on XOF (West African CFA franc).
 - Converts 1,000 FCFA into each destination's local currency.
 - Search destinations by city name.
@@ -28,11 +27,11 @@ The application retrieves current weather information and exchnge rates from pub
 
 - HTML5
 - CSS3
-- JavaScript (Vanilla Javascript)
+- JavaScript (Vanilla JavaScript)
 - Open-Meteo API
 - ExchangeRate-API
 - Nginx
-- HAProxy 
+- HAProxy
 - Linux / Ubuntu
 - Git and GitHub
 
@@ -67,15 +66,15 @@ Used to retrieve current weather information, including temperature and weather 
 
 ### 2. ExchangeRate-API
 
-Used to retrieve currency exchange rates based oh XOF.
+Used to retrieve currency exchange rates based on XOF.
 
 - Documentation:  https://www.exchangerate-api.com/docs/free
 - Endpoint: `https://open.er-api.com/v6/latest/XOF`
-- Data retrieved: currency rates and next update timetamp.
+- Data retrieved: currency rates and next update timestamp.
 
-**API requirements:** No API key, account, credentials, or authentication is required tu run this application.
+**API requirements:** No API key, account, credentials, or authentication is required to run this application.
 
-## Runnung the Application Locally
+## Running the Application Locally
 
 ### Prerequisites
 
@@ -93,7 +92,7 @@ No package installation or build process is required.
 git clone https://github.com/karmenbohouri/Playing-Around-with-APIs.git
 ```
 
-2. Navigate imto the project directory:
+2. Navigate into the project directory:
 
 ```bash
 cd Playing-Around-with-APIs
@@ -101,13 +100,13 @@ cd Playing-Around-with-APIs
 
 3. Open `index.html` in a web browser.
 
-Alternatively, use the Live Server extension is Visual Studio Code.
+Alternatively, use the Live Server extension in Visual Studio Code.
 
 The application will load weather and exchange rate data automatically.
 
 ### Deployment Architecture
 
-The application is deployed on two web servers behind a load balencer.
+The application is deployed on two web servers behind a load balancer.
 
                  Users
                    |
@@ -126,7 +125,7 @@ The application is deployed on two web servers behind a load balencer.
              \           /
               Application
 
-### Server Conficuration 
+### Server Configuration
 
 | Server | Role | IP Address |
 |---|---|---|
@@ -144,7 +143,7 @@ The application files are hosted in:
 
 on each web server:
 
-1. Install Nginx if is not already installed:
+1. Install Nginx if it is not already installed:
 
 ```bash
 sudo apt update
@@ -157,7 +156,7 @@ sudo apt install nginx -y
 
 ```bash
 sudo systemctl enable nginx
-sudo systemtl start nginx
+sudo systemctl start nginx
 ```
 
 4. Test the web server locally:
@@ -166,11 +165,11 @@ sudo systemtl start nginx
 curl -I http://localhost
 ```
 
-Repeat these on both Web01 and Web02.
+Repeat these steps on both Web01 and Web02.
 
 ### Configuring HAProxy on Lb01
 
-HAProxy is used distribute incoming requests between the two web servers.
+HAProxy is used to distribute incoming requests between the two web servers.
 
 Configuration file:
 
@@ -178,7 +177,7 @@ Configuration file:
 /etc/haproxy/haproxy.cfg
 ```
 
-The backend used the Round Robin algorithm:
+The backend uses the Round Robin algorithm:
 
 ```haproxy
 frontend http_front
@@ -248,7 +247,7 @@ active
 
 ### 4. Test Load Balancing
 
-The following command sends ten separate HTTPS requests to the load balencer:
+The following command sends ten separate HTTPS requests to the load balancer:
 
 ```bash
 for i in {1..10}; do
@@ -264,7 +263,7 @@ The `X-Served-By` response header identifies which web server handled each reque
 - Web02 handled 5 requests.
 - Requests alternated between both servers.
 
-This confirms that HAProxy succesfully distributes traffic using the Round Robin algorithm.
+This confirms that HAProxy successfully distributes traffic using the Round Robin algorithm.
 
 ### 5. Test the Public Application
 
@@ -274,13 +273,13 @@ https://35.175.242.143
 
 The application was also tested through the public load balancer address.
 
-## Chalenges an Solutions
+## Challenges and Solutions
 
-### 1. configuring Two Web Servers
+### 1. Configuring Two Web Servers
 
-**Challenge:** Ensuring that the application was coorectly deployed and accessible on both servers.
+**Challenge:** Ensuring that the application was correctly deployed and accessible on both servers.
 
-**Solution:** Deployed the same application files to Wen01 and Web02 and tested each server independently.
+**Solution:** Deployed the same application files to Web01 and Web02 and tested each server independently.
 
 ### 2. Configuring the Load Balancer 
 
@@ -290,7 +289,7 @@ The application was also tested through the public load balancer address.
 
 ### 3. Verifying Traffic Distribution 
 
-**Challenge:** Confirming which server handle each request.
+**Challenge:** Confirming which server handles each request.
 
 **Solution:** Used a custom`X-Served-By` response header and repeated curl requests to verify traffic distribution.
 
