@@ -8,6 +8,7 @@ The application retrieves current weather information and exchange rates from pu
 ## Live Application
 
 - **Deployed application:** https://35.175.242.143
+- **HTTPS NOTE:** The SSL certificate is expired and was issued for  www.51karmenbohouri.tech, not the IP address. Browsers may display a security warning.
 - **GitHub repository:** https://github.com/karmenbohouri/Playing-Around-with-APIs
 
 ## Features
@@ -150,22 +151,46 @@ sudo apt update
 sudo apt install nginx -y
 ```
 
-2. Copy the project files into `/var/www/html`.
+2. Clone the GitHub repository:
 
-3. Ensure Nginx is running and enabled:
+```bash
+git clone https://github.com/karmenbohouri/Playing-Around-with-APIs.git /tmp/Playing-Around-with-APIs
+```
+
+3. Copy the website files to the Nginx document root:
+
+```bash
+sudo cp -r /tmp/Playing-Around-with-APIs/index.html /tmp/Playing-Around-with-APIs/css /tmp/Playing-Around-with-APIs/js /var/www/html/
+```
+
+4. Ensure Nginx is running and enabled:
 
 ```bash
 sudo systemctl enable nginx
 sudo systemctl start nginx
 ```
 
-4. Test the web server locally:
+5. Test the web server locally:
 
 ```bash
 curl -I http://localhost
 ```
 
 Repeat these steps on both Web01 and Web02.
+
+
+### Nginx Configuration
+
+Nginx serves the application files from /var/www/html on both web servers.
+
+The following directive is configured in the Nginx server block:
+```bash
+add_header X-Served-By $hostname always;
+```
+
+This custom HTTP response header identifie the web server handling each resquest.
+
+It allows us to verify traffic distribution between Web01 and Web02 when testing HAProxy.
 
 ### Configuring HAProxy on Lb01
 
@@ -251,7 +276,7 @@ The following command sends ten separate HTTPS requests to the load balancer:
 
 ```bash
 for i in {1..10}; do
-     curl -sk -I -H "connection close" https://localhost | grep -i '^x-served-by:'
+    curl -sk -I -H "Connection: close" https://localhost | grep -i '^x-served-by:'
 done
 ```
 
@@ -301,7 +326,7 @@ The application was also tested through the public load balancer address.
 
 ## Demo Video
 
-[link here]
+Watch the application demonstration here: https://youtu.be/8jlhKHEeM7Y
 
 The demonstration should show:
 
@@ -309,6 +334,12 @@ The demonstration should show:
 2. The application accessed through the public load balancer.
 3. Both web servers handling requests.
 4. The Round Robin traffic distribution.
+
+## AI Usage Dsclosure
+
+AI tools, including ChatGPT and Claude, were used during the development process to support technical understanding, troubleshoot errors, and assist with documentation.
+
+The application was tested, reviewed, and deployed as part of the development process. The final implementation was validated through pratical testing.
 
 ## Credits
 
